@@ -8,6 +8,10 @@ namespace KrezBitboard
     {
         public const UInt64 diag = 72624976668147840; //0x8142241818244281
         public const UInt64 antiDiag = 9241421688590303745;
+        
+        public const bool white = true;
+        public const bool black = false;
+
         public enum Square : UInt64
         {
             A1 = B1 << 1, B1 = C1 << 1, C1 = D1 << 1, D1 = E1 << 1, E1 = F1 << 1, F1 = G1 << 1, G1 = H1 << 1, H1 = 1,
@@ -19,6 +23,7 @@ namespace KrezBitboard
             A7 = B7 << 1, B7 = C7 << 1, C7 = D7 << 1, D7 = E7 << 1, E7 = F7 << 1, F7 = G7 << 1, G7 = H7 << 1, H7 = A6 << 1,
             A8 = B8 << 1, B8 = C8 << 1, C8 = D8 << 1, D8 = E8 << 1, E8 = F8 << 1, F8 = G8 << 1, G8 = H8 << 1, H8 = A7 << 1,
         }
+
         /*
         public UInt64 P = (UInt64)Square.A2 | (UInt64)Square.B2 | (UInt64)Square.C2 | (UInt64)Square.D2 | (UInt64)Square.E2 | (UInt64)Square.F2 | (UInt64)Square.G2 | (UInt64)Square.H2;
         public UInt64 N = (UInt64)Square.B1 | (UInt64)Square.G1;
@@ -78,7 +83,7 @@ namespace KrezBitboard
         public static readonly UInt64[] files = [0x8080808080808080, 0x4040404040404040, 0x2020202020202020, 0x1010101010101010, 0x808080808080808, 0x404040404040404, 0x0202020202020202, 0x0101010101010101];
         public static readonly UInt64[] ranks = [0x00000000000000ff, 0x000000000000ff00, 0x0000000000ff0000, 0x00000000ff000000, 0x000000ff00000000, 0x0000ff0000000000, 0x00ff000000000000, 0xff00000000000000];
 
-        public bool side = true;
+        public bool side = white;
         public Int16 castling;
 
         public int halfMoves;
@@ -154,78 +159,65 @@ namespace KrezBitboard
         public static MagicBitBoard parseFEN(string FEN)
         {
             MagicBitBoard ch = new MagicBitBoard();
-            ch.castling = 0;
-            int arrayIndex = 0;
+            ch.castling = 0; //could use the constructor
+
             string hm = "";
             string ep = "";
-            //Console.WriteLine("FEN LENGTH :" + FEN.Length);
-            for (int i = 0; arrayIndex < FEN.Length; i++)
+ 
+            int i = 0;
+            for(i = 0; i < 12; i++){ch.pieceBB[i] = 0;}             
+            int pos = 63;
+
+            for (i = 0; FEN[i] != ' '; i++)
             {
-                for (int j = 0; j < 8; j++)
+                if (((FEN[i] >= 'a') && (FEN[i] <= 'z')) || ((FEN[i] >= 'A') && (FEN[i] <= 'Z')))
                 {
-                    int pos = 63 - (i * 8 + j);
-                    if (((FEN[arrayIndex] >= 'a') && (FEN[arrayIndex] <= 'z')) || ((FEN[arrayIndex] >= 'A') && (FEN[arrayIndex] <= 'Z')))
-                    {
-                        //Console.WriteLine(FEN[array]);
-                        ch.pieceBB[(int)ChessBoard.fromCharPieces[FEN[arrayIndex]]] |= ChessBoard.square[pos];
-                        arrayIndex++;
-                    }
-
-                    else if (((FEN[arrayIndex] > '0') && (FEN[arrayIndex] <= '9')))
-                    {
-
-                        j += FEN[arrayIndex] - '0' - 1;                       
-                        arrayIndex++;
-                    }
-
-                    else if(FEN[arrayIndex] == ' ')
-                    {
-                        if(FEN[arrayIndex+1] == 'b') { ch.side = false; }
-                        
-                        for (int k = arrayIndex+3; k < FEN.Length-2; k++)
-                        {
-                            
-                            switch (FEN[k])
-                            {
-                                case 'K':
-                                    ch.castling |= 1;
-                                    break;
-                                case 'Q':
-                                    ch.castling |= 2;
-                                    break;
-                                case 'k':
-                                    ch.castling |= 4;
-                                    break;
-                                case 'q':
-                                    ch.castling |= 8;
-                                    break;
-                                case char c when ((c >= '0') && (c <= '9')):
-                                    hm += c;
-                                    break;
-                                case char c when ((c >= 'a') && (c <= 'h')):
-                                    ep += c;
-                                    ep += FEN[k + 1];
-                                    k++;
-                                    break;
-                                default:         //nécessaire??
-                                    break;
-                            }
-                        }
-                        //Console.WriteLine("string version :" + hm);
-                        ch.halfMoves = Int32.Parse(hm);
-                        //ChessBoard.printBoard(ChessBoard.squareDict[ep.ToUpper()]);
-                        if (ep != "") { ch.enPassant = squareCoordUint64(ChessBoard.squareDict[ep.ToUpper()]); }
-                        return ch;
-                    }
-
-                    else
-                    {
-                        arrayIndex++;
-                        j--;
-                    }
+                    ch.pieceBB[(int)ChessBoard.fromCharPieces[FEN[i]]] |= ChessBoard.square[pos];
+                    pos--;
                 }
 
+                else if ((FEN[i] > '0') && (FEN[i] <= '9'))
+                {
+                    pos -= FEN[i] - '0';                       
+                }
             }
+
+            if(FEN[i+1] == 'b') ch.side = black;
+            i+=3;
+            
+            for(; i < FEN.Length - 2; i++){
+                switch (FEN[i])
+                {
+                    case 'k':
+                        ch.castling |= 1;
+                        break;
+                    case 'q':
+                        ch.castling |= 2;
+                        break;
+                    case 'K':
+                        ch.castling |= 4;
+                        break;
+                    case 'Q':
+                        ch.castling |= 8;
+                        break;
+                    case char c when (c >= 'a') && (c <= 'h'):
+                        ep += c;
+                        ep += FEN[++i];
+                        i++;
+                        break;
+                    case '1':
+                        hm = "100";
+                        break;
+                    case char c when (c >= '0') && (c <= '9'):
+                        hm += c;
+                        hm += FEN[i+1];
+                        break;
+                }
+            
+            }
+
+            ch.halfMoves = Int32.Parse(hm);
+            if (ep != "") { ch.enPassant = squareCoordUint64(ChessBoard.squareDict[ep.ToUpper()]); }
             return ch;
         }
 
