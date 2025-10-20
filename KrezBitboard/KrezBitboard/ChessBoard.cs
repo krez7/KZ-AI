@@ -125,8 +125,6 @@ namespace KrezBitboard
                 id = (id << 1);
             }
 
-            
-
         }
         public ChessBoard()
         {
@@ -156,23 +154,29 @@ namespace KrezBitboard
             castling = 15;
 
         }
-        public static MagicBitBoard parseFEN(string FEN)
-        {
-            MagicBitBoard ch = new MagicBitBoard();
-            ch.castling = 0; //could use the constructor
 
+        /*
+        public ChessBoard(UInt64[] _pieceBB, bool _side, int _enPassant, int _halfMoves){
+            pieceBB = _pieceBB;
+            side = _side;
+            enPassant = _enPassant;
+            halfMoves = _halfMoves;
+        }
+        */
+
+        public ChessBoard(string FEN) : this()
+        {
             string hm = "";
             string ep = "";
  
             int i = 0;
-            for(i = 0; i < 12; i++){ch.pieceBB[i] = 0;}             
             int pos = 63;
 
             for (i = 0; FEN[i] != ' '; i++)
             {
                 if (((FEN[i] >= 'a') && (FEN[i] <= 'z')) || ((FEN[i] >= 'A') && (FEN[i] <= 'Z')))
                 {
-                    ch.pieceBB[(int)ChessBoard.fromCharPieces[FEN[i]]] |= ChessBoard.square[pos];
+                    pieceBB[(int)ChessBoard.fromCharPieces[FEN[i]]] |= ChessBoard.square[pos];
                     pos--;
                 }
 
@@ -182,23 +186,23 @@ namespace KrezBitboard
                 }
             }
 
-            if(FEN[i+1] == 'b') ch.side = black;
+            if(FEN[i+1] == 'b') side = black;
             i+=3;
             
             for(; i < FEN.Length - 2; i++){
                 switch (FEN[i])
                 {
                     case 'k':
-                        ch.castling |= 1;
+                        castling |= 1;
                         break;
                     case 'q':
-                        ch.castling |= 2;
+                        castling |= 2;
                         break;
                     case 'K':
-                        ch.castling |= 4;
+                        castling |= 4;
                         break;
                     case 'Q':
-                        ch.castling |= 8;
+                        castling |= 8;
                         break;
                     case char c when (c >= 'a') && (c <= 'h'):
                         ep += c;
@@ -213,12 +217,9 @@ namespace KrezBitboard
                         hm += FEN[i+1];
                         break;
                 }
-            
             }
-
-            ch.halfMoves = Int32.Parse(hm);
-            if (ep != "") { ch.enPassant = squareCoordUint64(ChessBoard.squareDict[ep.ToUpper()]); }
-            return ch;
+            enPassant = ep != "" ? squareCoordUint64(ChessBoard.squareDict[ep.ToUpper()]) : 0;
+            halfMoves = Int32.Parse(hm);
         }
 
         public UInt64 bitboard()

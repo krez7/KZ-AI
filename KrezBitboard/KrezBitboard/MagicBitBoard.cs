@@ -121,6 +121,19 @@ namespace KrezBitboard
             ///
             initRandKey();
         }
+
+        public MagicBitBoard(ChessBoard board){
+            pieceBB = board.pieceBB;
+            side = board.side;
+            enPassant = board.enPassant;
+            halfMoves = board.halfMoves;
+            initRandKey();
+        }
+
+        public MagicBitBoard(string FEN) : base(FEN) {
+            initRandKey();
+        }
+
         static MagicBitBoard()
         {
             knightAttacks = new UInt64[64];
@@ -298,6 +311,10 @@ namespace KrezBitboard
 
                 }
             }
+        }
+
+        public static MagicBitBoard ParseFENMagicBitBoard(string FEN) {
+            return new MagicBitBoard();
         }
         public UInt64 kingAttacks(int sq) // formerly attPatternKing
         {
