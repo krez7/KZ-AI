@@ -117,8 +117,6 @@ namespace KrezBitboard
 
         public MagicBitBoard()
         {
-            ////////////////////////////////////////////////////////////////////////////////////
-            ///
             initRandKey();
         }
 
@@ -185,38 +183,38 @@ namespace KrezBitboard
             {
                 for (int j = 0; j < 8; j++)
                 {
-                    UInt64 te = ((UInt64)1 << (j + (8 * i)));
+                    UInt64 piecePos = (UInt64)1 << (j + (8 * i));
 
-                    bishopAttacks[j + (i * 8)] = te;
-                    for (int k = 0; (k < (7 - i - 1)) & (k < (j - 1)); k++)
+                    bishopAttacks[j + (i * 8)] = piecePos;
+                    for (int k = 1; (k + i < 8) && (j - k >= 0); k++)
                     {
-                        bishopAttacks[j + (i * 8)] |= (bishopAttacks[j + (i * 8)] << 7);
+                        bishopAttacks[j + (i * 8)] |= bishopAttacks[j + (i * 8)] << 7;
                     }
-                    UInt64 temp = te;
+                    UInt64 temp = piecePos;
 
-                    for (int k = 0; (k < (7 - i - 1)) & (k < (7 - j - 1)); k++)
+                    for (int k = 1; (k + i < 8) && (k + j < 8); k++)
                     {
-                        temp |= (temp << 9);
-                    }
-                    bishopAttacks[j + (i * 8)] |= temp;
-
-                    temp = te;
-
-                    for (int k = 0; (k < (i - 1)) & (k < (7 - j - 1)); k++)
-                    {
-                        temp |= (temp >> 7);
+                        temp |= temp << 9;
                     }
                     bishopAttacks[j + (i * 8)] |= temp;
 
-                    temp = te;
+                    temp = piecePos;
 
-                    for (int k = 0; (k < (i - 1)) & (k < (j - 1)); k++)
+                    for (int k = 1; (i - k >= 0) && (k + j < 8); k++)
                     {
-                        temp |= (temp >> 9);
+                        temp |= temp >> 7;
                     }
                     bishopAttacks[j + (i * 8)] |= temp;
 
-                    bishopAttacks[j + (i * 8)] &= ~te;
+                    temp = piecePos;
+
+                    for (int k = 1; (i - k >= 0) && (j - k >= 0); k++)
+                    {
+                        temp |= temp >> 9;
+                    }
+                    bishopAttacks[j + (i * 8)] |= temp;
+
+                    bishopAttacks[j + (i * 8)] &= ~piecePos;
 
                     /// rook
                     /// 
@@ -313,9 +311,6 @@ namespace KrezBitboard
             }
         }
 
-        public static MagicBitBoard ParseFENMagicBitBoard(string FEN) {
-            return new MagicBitBoard();
-        }
         public UInt64 kingAttacks(int sq) // formerly attPatternKing
         {
             UInt64 pos = square[sq];
