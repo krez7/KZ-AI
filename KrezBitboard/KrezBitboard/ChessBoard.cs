@@ -164,8 +164,17 @@ namespace KrezBitboard
         }
         */
 
-        public ChessBoard(string FEN) : this()
+        public ChessBoard(string FEN)
         {
+            threeFold = new UInt64[100];
+            pieceKeys = new UInt64[12,64];
+            enPassantKeys = new UInt64[64];
+            castleKeys = new UInt64[16];
+            moveCache = new List<Move>();
+            
+            tfIndex = 0;
+            castling = 0;
+
             string hm = "";
             string ep = "";
  
@@ -218,7 +227,7 @@ namespace KrezBitboard
                         break;
                 }
             }
-            enPassant = ep != "" ? squareCoordUint64(ChessBoard.squareDict[ep.ToUpper()]) : 0;
+            enPassant = ep != "" ? squareCoordUint64(ChessBoard.squareDict[ep.ToUpper()]) : -1;
             halfMoves = Int32.Parse(hm);
         }
 
