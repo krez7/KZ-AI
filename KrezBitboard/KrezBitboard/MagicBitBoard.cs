@@ -9,7 +9,6 @@ namespace KrezBitboard
 {
     public class MagicBitBoard : ChessBoard
     {      
-        public static UInt64[,] pawnAttacks;
         public static UInt64[] bishopAttacks;
         public static UInt64[] knightAttacks;
         //public UInt64[] rookAttackse;
@@ -233,40 +232,6 @@ namespace KrezBitboard
 
             }
 
-            pawnAttacks = new UInt64[2, 64];
-            //White
-            pawnAttacks[1, 0] = ((UInt64)Square.G2) | ((UInt64)Square.H2) | ((UInt64)Square.H3);
-            pawnAttacks[1, 1] = ((UInt64)Square.H2) | ((UInt64)Square.F2) | ((UInt64)Square.G2) | ((UInt64)Square.G3);
-            pawnAttacks[1, 7] = ((UInt64)Square.A2) | ((UInt64)Square.B2) | ((UInt64)Square.A3);
-            
-            for (int i = 2; i < 7; i++)
-            {
-                pawnAttacks[1, i] = pawnAttacks[1, i - 1] << 1;
-            }
-            for (int i = 1; i < 7; i++)
-            {
-                for (int j = 0; j < 8; j++)
-                {
-                    pawnAttacks[1, j + i * 8] = pawnAttacks[1, j + (i-1) * 8] << 8;
-                }   
-            }
-            
-            //Black
-            pawnAttacks[0, 63] = ((UInt64)Square.A7) | ((UInt64)Square.B7) | ((UInt64)Square.A6);
-            pawnAttacks[0, 62] = ((UInt64)Square.A7) | ((UInt64)Square.C7) | ((UInt64)Square.B7) | ((UInt64)Square.B6);
-            pawnAttacks[0, 56] = ((UInt64)Square.H7) | ((UInt64)Square.H6) | ((UInt64)Square.G7);
-            for (int i = 0; i < 5; i++)
-            {
-                pawnAttacks[0, 61 - i] = pawnAttacks[0, 62 - i] >> 1;
-            }
-            for (int i = 1; i < 7; i++)
-            {
-                for (int j = 0; j < 8; j++)
-                {
-                    pawnAttacks[0, j + (6-i) * 8] = pawnAttacks[0, j + (7-i) * 8] >> 8;
-                }
-            }
-
             /*
             rookOccupancyRanks = new Byte[64];
             for (int i = 2; i < 128; i = i + 2)
@@ -365,7 +330,7 @@ namespace KrezBitboard
 
         }
         */
-
+ 
         public static UInt64 bishopAttacksOcc(UInt64 mask, int pos)
         {
             
@@ -750,7 +715,6 @@ namespace KrezBitboard
         
         public void getPawnMoves(int sq, UInt64 occupancy, bool color, List<Move> moves) // can use LS1B maybe ??
         {
-            UInt64 allMoves = color ? pawnAttacks[1, sq] : pawnAttacks[0, sq];
             int i = sq / 8;
             int j = 7-(sq % 8);
 
@@ -761,15 +725,13 @@ namespace KrezBitboard
             {
                 if ((enPassant != -1) && ((sq == (enPassant - 7)) || (sq == (enPassant - 9)))) //vérifier si la case est vide
                 {
-                    Move enPassantMove = new Move('P', sq, enPassant);
-                    moves.Add(enPassantMove);
+                    moves.Add(new Move('P', sq, enPassant, true));
                 }
-                bool pro = false;
-                if (i == 6) { pro = true; }
+                bool promotable = i == 6;
 
-                if ((square[sq + 8] & occupancy) == 0)
+                if (i < 7 && (square[sq + 8] & occupancy) == 0)
                 {
-                    if (pro) 
+                    if (promotable) 
                     {                 
                             moves.Add(new Move('P', sq, sq + 8, false, 1));
                             moves.Add(new Move('P', sq, sq + 8, false, 4));
@@ -778,79 +740,82 @@ namespace KrezBitboard
                 }
 
 
-                if ((i == 1) && ((square[sq + 8] & occupancy) == 0) && ((square[sq + 16] & occupancy) == 0))
+                if (i == 1)
                 {
-                    moves.Add(new Move('P', sq, sq + 16, false));
+                    if((square[sq + 8] & occupancy) == 0)  moves.Add(new Move('P', sq, sq + 8, false));
+                    if((square[sq + 16] & occupancy) == 0)moves.Add(new Move('P', sq, sq + 16, false));
                 }
-                else if ((j < 7) && (allMoves & files[j + 1] & colorOccupancy) != 0)
+
+                if ((j < 7) && (square[sq + 9] & colorOccupancy) != 0)
                 {
-                    if (pro)
+                    if (promotable)
+                    {
+                        moves.Add(new Move('P', sq, sq + 9, true, 1));
+                        moves.Add(new Move('P', sq, sq + 9, true, 4));
+                    }
+                    else { moves.Add(new Move('P', sq, sq + 9, true)); }
+                }
+
+
+                if ((j >= 0) && (square[sq + 7] & colorOccupancy) != 0)
+                {
+                    if (promotable)
                     {
                         moves.Add(new Move('P', sq, sq + 7, true, 1));
                         moves.Add(new Move('P', sq, sq + 7, true, 4));
                     }
                     else { moves.Add(new Move('P', sq, sq + 7, true)); }
                 }
-                if ((j != 0) && (allMoves & files[j - 1] & colorOccupancy) != 0)
-                {
-                    if (pro)
-                    {
-                        
-                        moves.Add(new Move('P', sq, sq + 9, true, 1));
-                        moves.Add(new Move('P', sq, sq + 9, true, 4));
-
-                    }
-                    else { moves.Add(new Move('P', sq, sq + 9, true)); }
-                }
             }
 
             else
             {
-                if ((enPassant != -1) && ((sq == (enPassant + 7)) || (sq == (enPassant + 9)))) //vérifier si la case est vide
+                if ((enPassant != -1) && ((sq == (enPassant - 7)) || (sq == (enPassant - 9)))) //vérifier si la case est vide
                 {
-                    Move enPassantMove = new Move('p', sq, enPassant);
-                    moves.Add(enPassantMove);
+                    moves.Add(new Move('P', sq, enPassant, true));
                 }
-                bool pro = false;
-                if (i == 1) { pro = true; }
+                bool promotable = i == 6;
 
-                if ((square[sq - 8] & occupancy) == 0)
+                if (i < 7 && (square[sq + 8] & occupancy) == 0)
                 {
-                    if (pro)
-                    {
-                        moves.Add(new Move('p', sq, sq - 8, false, 7));
-                        moves.Add(new Move('p', sq, sq - 8, false, 10));
+                    if (promotable) 
+                    {                 
+                            moves.Add(new Move('P', sq, sq + 8, false, 1));
+                            moves.Add(new Move('P', sq, sq + 8, false, 4));
                     }
-
-                    else { moves.Add(new Move('p', sq, sq - 8, false)); }
+                    else { moves.Add(new Move('p', sq, sq + 8, false)); }
                 }
 
 
-                if ((i == 6) && ((square[sq - 8] & occupancy) == 0) && ((square[sq - 16] & occupancy) == 0))
+                if (i == 1)
                 {
-                    moves.Add(new Move('p', sq, sq - 16, false));
+                    if((square[sq + 8] & occupancy) == 0)  moves.Add(new Move('P', sq, sq + 8, false));
+                    if((square[sq + 16] & occupancy) == 0)moves.Add(new Move('P', sq, sq + 16, false));
                 }
-                else if ((j < 7) && (allMoves & files[j + 1] & colorOccupancy) != 0)
+
+                if ((j < 7) && (square[sq + 9] & colorOccupancy) != 0)
                 {
-                    if (pro)
+                    if (promotable)
                     {
-                        moves.Add(new Move('p', sq, sq - 9, true, 7));
-                        moves.Add(new Move('p', sq, sq - 9, true, 10));
+                        moves.Add(new Move('P', sq, sq + 9, true, 1));
+                        moves.Add(new Move('P', sq, sq + 9, true, 4));
                     }
-                    else { moves.Add(new Move('p', sq, sq - 9, true)); }
+                    else { moves.Add(new Move('P', sq, sq + 9, true)); }
                 }
-                if ((j != 0) && (allMoves & files[j - 1] & colorOccupancy) != 0)
+
+
+                if ((j >= 0) && (square[sq + 7] & colorOccupancy) != 0)
                 {
-                    if (pro)
+                    if (promotable)
                     {
-                        moves.Add(new Move('p', sq, sq - 7, true, 7));
-                        moves.Add(new Move('p', sq, sq - 7, true, 10));
+                        moves.Add(new Move('P', sq, sq + 7, true, 1));
+                        moves.Add(new Move('P', sq, sq + 7, true, 4));
                     }
-                    else { moves.Add(new Move('p', sq, sq - 7, true)); }
+                    else { moves.Add(new Move('P', sq, sq + 7, true)); }
                 }
             }
-
         }
+
         public void getKnightMoves(int sq, UInt64 occupancy, bool color, List<Move> moves)
         {
            
