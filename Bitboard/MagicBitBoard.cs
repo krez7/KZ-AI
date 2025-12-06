@@ -548,6 +548,29 @@ namespace Bitboard
             return rookAttackTable[sq, occupancy];
         }
 
+        public UInt64 getPawnThreat(int sq, bool color){
+            UInt64 threatPawn = 0, squareUint64 = square[sq];
+            if(color){
+                if(sq%8 != 0) threatPawn |= square[sq + 7];
+                if((sq+1)%8 != 0) threatPawn |= square[sq + 9];
+                if(enPassant != -1){
+                    if(enPassant - sq == 1) threatPawn |= square[sq + 1];
+                    if(enPassant - sq == -1) threatPawn |= square[sq - 1];
+                }
+            }
+
+            else{
+                if(sq%8 != 0) threatPawn |= square[sq - 9];
+                if((sq+1)%8 != 0) threatPawn |= square[sq - 7];
+                if(enPassant != -1){
+                    if(enPassant - sq == 1) threatPawn |= square[sq + 1];
+                    if(enPassant - sq == -1) threatPawn |= square[sq - 1];
+                }
+            }
+
+            return threatPawn;
+        } 
+
         public UInt64 getThreat(int sq, bool color, UInt64 colorOccupancy, UInt64 boardOccAdv)
         {
             UInt64 posOppP = !color ? pieceBB[0] : pieceBB[6];
@@ -563,7 +586,7 @@ namespace Bitboard
             {
                 int n = LS1BIndex(posOppP);
                 posOppP &= ~square[n];
-                threatMap |= pawnAttacks[color ? 0 : 1, n];
+                threatMap |= getPawnThreat(n, !color);
             }
             //printBoard(threatMap);
             while (posOppN != 0)
