@@ -1,5 +1,5 @@
 ﻿using System;
-using KrezBitboard;
+using Bitboard;
 
 namespace Krezb0t
 {

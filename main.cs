@@ -1,4 +1,4 @@
-﻿using KrezBitboard;
+﻿using Bitboard;
 using Krezb0t;
 using System.Diagnostics;
 using System.Collections.Generic;
