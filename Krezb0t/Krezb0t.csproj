@@ -7,7 +7,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="Bitboard\Bitboard.csproj" />
+    <ProjectReference Include="..\Bitboard\Bitboard.csproj" />
   </ItemGroup>
 
 </Project>

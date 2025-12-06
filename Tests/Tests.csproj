@@ -18,4 +18,9 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Krezb0t.csproj" />
+    <ProjectReference Include="..\Bitboard\Bitboard.csproj" />
+  </ItemGroup>
+
 </Project>
