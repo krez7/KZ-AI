@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Drawing;
 
 
-namespace KrezBitboard
+namespace Bitboard
 {
     public class MagicBitBoard : ChessBoard
     {      
