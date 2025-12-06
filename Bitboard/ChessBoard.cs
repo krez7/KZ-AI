@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Reflection;
 
-namespace KrezBitboard
+namespace Bitboard
 {
     public class ChessBoard
     {

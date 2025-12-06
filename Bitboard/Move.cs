@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace KrezBitboard
+namespace Bitboard
 {
     public class Move(char pt, int _square, int _to, bool _attack = false, int? _promotion=null, bool _castlingMove=false, bool _isEnPassant=false)
     {
