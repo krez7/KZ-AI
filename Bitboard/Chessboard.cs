@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Bitboard
 {
-    public class ChessBoard
+    public class Chessboard
     {
         public const UInt64 diag = 72624976668147840; //0x8142241818244281
         public const UInt64 antiDiag = 9241421688590303745;
@@ -109,7 +109,7 @@ namespace Bitboard
         UInt64 sideKey;
         /// /////////
 
-        static ChessBoard()
+        static Chessboard()
         {
             squareDict = new Dictionary<string, UInt64>(64);
             foreach (Square sq in Enum.GetValues(typeof(Square)))
@@ -126,7 +126,7 @@ namespace Bitboard
             }
 
         }
-        public ChessBoard()
+        public Chessboard()
         {
             threeFold = new UInt64[100];
             pieceKeys = new UInt64[12,64];
@@ -156,7 +156,7 @@ namespace Bitboard
         }
 
         /*
-        public ChessBoard(UInt64[] _pieceBB, bool _side, int _enPassant, int _halfMoves){
+        public Chessboard(UInt64[] _pieceBB, bool _side, int _enPassant, int _halfMoves){
             pieceBB = _pieceBB;
             side = _side;
             enPassant = _enPassant;
@@ -164,7 +164,7 @@ namespace Bitboard
         }
         */
 
-        public ChessBoard(string FEN)
+        public Chessboard(string FEN)
         {
             threeFold = new UInt64[100];
             pieceKeys = new UInt64[12,64];
@@ -185,7 +185,7 @@ namespace Bitboard
             {
                 if (((FEN[i] >= 'a') && (FEN[i] <= 'z')) || ((FEN[i] >= 'A') && (FEN[i] <= 'Z')))
                 {
-                    pieceBB[(int)ChessBoard.fromCharPieces[FEN[i]]] |= ChessBoard.square[pos];
+                    pieceBB[(int)Chessboard.fromCharPieces[FEN[i]]] |= Chessboard.square[pos];
                     pos--;
                 }
 
@@ -227,7 +227,7 @@ namespace Bitboard
                         break;
                 }
             }
-            enPassant = ep != "" ? squareCoordUint64(ChessBoard.squareDict[ep.ToUpper()]) : -1;
+            enPassant = ep != "" ? squareCoordUint64(Chessboard.squareDict[ep.ToUpper()]) : -1;
             halfMoves = Int32.Parse(hm);
         }
 
@@ -289,7 +289,7 @@ namespace Bitboard
             }
         }
 
-        public void printChessBoard()
+        public void printChessboard()
         {
             string[] letters = ["A", "B", "C", "D", "E", "F", "G", "H"];
             Console.Write("  ");

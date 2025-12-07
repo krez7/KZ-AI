@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace Bitboard
 {
-    public class MagicBitBoard : ChessBoard
+    public class MagicBoard : Chessboard
     {      
         public static UInt64[] bishopAttacks;
         public static UInt64[] knightAttacks;
@@ -114,12 +114,12 @@ namespace Bitboard
                                     11,10,10,10,10,10,10,11,
                                     12,11,11,11,11,11,11,12];
 
-        public MagicBitBoard()
+        public MagicBoard()
         {
             initRandKey();
         }
 
-        public MagicBitBoard(ChessBoard board){
+        public MagicBoard(Chessboard board){
             pieceBB = board.pieceBB;
             side = board.side;
             enPassant = board.enPassant;
@@ -127,11 +127,11 @@ namespace Bitboard
             initRandKey();
         }
 
-        public MagicBitBoard(string FEN) : base(FEN) {
+        public MagicBoard(string FEN) : base(FEN) {
             initRandKey();
         }
 
-        static MagicBitBoard()
+        static MagicBoard()
         {
             knightAttacks = new UInt64[64];
 
@@ -499,9 +499,9 @@ namespace Bitboard
             //Console.WriteLine(relevance);
             for (int i = 0; i < occupancies.Length; i++)
             {
-                //ChessBoard.printBoard(occupancies[i]);
+                //Chessboard.printBoard(occupancies[i]);
                 occAttacks[i] = slidingPiece ? bishopAttacksOcc(occupancies[i], square) : rookAttacksOcc(occupancies[i], square);
-                //ChessBoard.printBoard(occAttacks[i]);
+                //Chessboard.printBoard(occAttacks[i]);
 
             }
             
@@ -843,7 +843,7 @@ namespace Bitboard
         {
            
             UInt64 opColorOccupancy = boardOcc(!color);
-            //ChessBoard.printBoard(opColorOccupancy);
+            //Chessboard.printBoard(opColorOccupancy);
             UInt64 possibleMoves = (knightAttacks[sq] & ~(occupancy & (~(opColorOccupancy))));
             UInt64 attackMoves = possibleMoves & opColorOccupancy;
             possibleMoves &= ~attackMoves;
@@ -893,7 +893,7 @@ namespace Bitboard
             UInt64 threatMap = getThreat(sq, color, colorOccupancy, boardOccAdv);
 
             if ((threatMap & square[sq]) != 0) {
-                //printChessBoard();
+                //printChessboard();
                 isInCheck = true;                
                 //Console.WriteLine(color);
             }
@@ -1124,7 +1124,7 @@ namespace Bitboard
                     printBoard(pieceBB[((int)fromCharPieces[move.pieceType])]);
                     Console.WriteLine("nb : " + t);
                     Console.WriteLine(color);
-                    printChessBoard();
+                    printChessboard();
                     //gameHasEnded = true;
                     //winner = color;
                 }

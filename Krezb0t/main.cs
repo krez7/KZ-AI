@@ -27,7 +27,7 @@ class Program
         Move bMove = root.bestMove();
         bMove.printMove();
         */
-        ChessBoard.printUInt64(0xFFFF);
+        Chessboard.printUInt64(0xFFFF);
         /*
         MagicBitBoard test = ChessBoard.parseFEN("2b2b1r/1pNpnkb1/b1p5/BpPpp1pb/K3P2p/5pNp/Q1P2PqP/R3n1BR w - - 0 1");
         test.printChessBoard();
