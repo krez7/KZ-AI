@@ -35,7 +35,8 @@ public class BitboardTest
         		() => Assert.Equal((UInt64)Square.E8, testBoard.pieceBB[(int)Chessboard.Material.k]),
 			() => Assert.Equal((UInt64)Square.E8, testBoard.pieceBB[(int)Chessboard.Material.k]),
 			() => Assert.Equal(15, testBoard.castling),
-			() => Assert.Equal(36, testBoard.enPassant)
+			() => Assert.Equal(36, testBoard.enPassant),
+			() => Assert.Equal(0, testBoard.halfMoves)
     		);
 	}
 	
