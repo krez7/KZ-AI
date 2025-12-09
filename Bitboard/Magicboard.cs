@@ -7,7 +7,7 @@ using System.Drawing;
 
 namespace Bitboard
 {
-    public class MagicBoard : Chessboard
+    public class Magicboard : Chessboard
     {      
         public static UInt64[] bishopAttacks;
         public static UInt64[] knightAttacks;
@@ -114,12 +114,12 @@ namespace Bitboard
                                     11,10,10,10,10,10,10,11,
                                     12,11,11,11,11,11,11,12];
 
-        public MagicBoard()
+        public Magicboard()
         {
             initRandKey();
         }
 
-        public MagicBoard(Chessboard board){
+        public Magicboard(Chessboard board){
             pieceBB = board.pieceBB;
             side = board.side;
             enPassant = board.enPassant;
@@ -127,11 +127,11 @@ namespace Bitboard
             initRandKey();
         }
 
-        public MagicBoard(string FEN) : base(FEN) {
+        public Magicboard(string FEN) : base(FEN) {
             initRandKey();
         }
 
-        static MagicBoard()
+        static Magicboard()
         {
             knightAttacks = new UInt64[64];
 
