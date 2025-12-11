@@ -218,12 +218,15 @@ namespace Bitboard
                         ep += FEN[++i];
                         i++;
                         break;
-                    case '1':
-                        hm = "100";
+                    case '0':
+                        hm = "0";
                         break;
                     case char c when (c >= '0') && (c <= '9'):
                         hm += c;
-                        hm += FEN[i+1];
+                        if(FEN[++i] != ' ') {
+                            hm += FEN[i];
+                            if(FEN[++i] != ' ') hm = "100";
+                        }
                         break;
                 }
             }
