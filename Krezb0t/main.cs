@@ -33,5 +33,22 @@ class Program
            }
            else{Console.WriteLine("Incorrect input");}
         }
+        
+        /////////Color selection/////////
+        bool playerColor;
+        correctInput = false;
+        
+        Console.Write("Select your color(b/w): ");
+        while(!correctInput){
+           string? colorStr = Console.ReadLine();
+           if(colorStr == "b"){
+               correctInput = true; 
+               playerColor = Chessboard.white;
+           }
+           else if(colorStr == "w"){
+               correctInput = true;
+               playerColor = Chessboard.white;}
+           else{Console.WriteLine("Incorrect input");}
+        }
     }
 }
