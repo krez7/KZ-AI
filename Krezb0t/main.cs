@@ -6,44 +6,32 @@ class Program
 {
     static void Main(string[] args)
     {
-        MCTS root = new MCTS();
+        Console.WriteLine("KZ-Bot - v0.0.0");
+        
+        Magicboard board;
+        bool correctInput = false;
 
-        Console.WriteLine("Hello, World!");
+        /////////MAIN MENU//////////
+        Console.WriteLine("1) Play");
+        Console.WriteLine("2) Start from Position");
+        Console.Write("Choose an option: ");
 
-        for(int i = 0; i < 100; i++){
-            Console.WriteLine(i);
+        while(!correctInput){
+            string? option = Console.ReadLine();
+            if(option == "1"){
+                correctInput = true;
+                board = new Magicboard();
+            }
+            else if(option == "2"){
+                Console.WriteLine("Enter FEN: ");
+                string? FEN = Console.ReadLine();
+            
+                if(!string.IsNullOrEmpty(FEN)){
+                    correctInput = true;
+                    board = new Magicboard(FEN);           
+                }
+           }
+           else{Console.WriteLine("Incorrect input");}
         }
-        //Console.WriteLine(test.ToAscii());
-        /*
-        for (int i = 0; i < 10000; i++)
-        {
-            MagicBitBoard test = ChessBoard.parseFEN("rn1qkbnr/ppp1pppp/3p4/8/7P/2N2b2/PPPPPPP1/R1BQKB1R w KQkq - 0 4");
-            //test.printChessBoard();
-            //Console.WriteLine(test.ToAscii());
-                root.process(test);
-                Console.WriteLine($"{i}");
-        }
-
-        Move bMove = root.bestMove();
-        bMove.printMove();
-        */
-        Chessboard.printUInt64(0xFFFF);
-        /*
-        MagicBitBoard test = ChessBoard.parseFEN("2b2b1r/1pNpnkb1/b1p5/BpPpp1pb/K3P2p/5pNp/Q1P2PqP/R3n1BR w - - 0 1");
-        test.printChessBoard();
-        UInt64 posQ = test.pieceBB[4];
-        int n = ChessBoard.LS1BIndex(posQ);
-        List<Move> ez = new List<Move>();
-        test.getQueenMoves(n, test.boardOcc(true), true, ez);
-
-
-        foreach (Move move in ez)
-        {
-            Console.WriteLine(move.to);
-        }
-        Console.WriteLine(ChessBoard.LS1BIndex(test.pieceBB[9]));
-        ChessBoard.printUInt64(test.getbishopAttackMap(n, test.boardOcc(true) | test.boardOcc(false)));
-        */
-        Console.ReadLine();
     }
 }
