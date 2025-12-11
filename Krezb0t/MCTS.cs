@@ -48,7 +48,7 @@ namespace Krezb0t
                 return (((double)(child.wins) / (double)child.visited) + c_param * (Math.Sqrt((2 * Math.Log(visited)) / child.visited)));
             }
         }
-        MCTS selection(MagicBitBoard board)
+        MCTS selection(Magicboard board)
         {
             if (lazyMoves.Count > 0)
             {
@@ -83,7 +83,7 @@ namespace Krezb0t
             }
         }
 
-        MCTS expand(MagicBitBoard board)
+        MCTS expand(Magicboard board)
         {
             lazyMoves = board.getMoves(board.side);
             Random rand = new Random();
@@ -95,7 +95,7 @@ namespace Krezb0t
             return nextMove;
         }
 
-        bool? expansion(MagicBitBoard board)
+        bool? expansion(Magicboard board)
         {
             visited++;
             if (!board.gameHasEnded)
@@ -116,7 +116,7 @@ namespace Krezb0t
 
 
         }
-        internal bool? process(MagicBitBoard board)
+        internal bool? process(Magicboard board)
         {
             visited++;
             if(children.Any()) // .Any() ??
