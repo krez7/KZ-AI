@@ -6,7 +6,7 @@ public class BitboardTest
 {
 	[Fact]
 	public void FENConstructorTest(){
-		Chessboard testBoard = new ("r1bqkbnr/pp2pp1p/2n3p1/1BppP3/8/5N2/PPPP1PPP/RNBQK2R w KQkq d6 0 5"); // edited from https://lichess.org/study/7WCFYt0R/ePy2DmAC#5
+		Chessboard testBoard = new ("r1bqkbnr/pp2pp1p/2n3p1/1BppP3/8/5N2/PPPP1PPP/RNBQK2R w KQkq d6 100 5"); // edited from https://lichess.org/study/7WCFYt0R/ePy2DmAC#5
 		
 		UInt64 wPawnPos = (UInt64)(Square.A2 | Square.B2 | Square.C2 | Square.D2 | Square.E5 | Square.F2 | Square.G2 | Square.H2);
 		UInt64 bPawnPos = (UInt64)(Square.A7 | Square.B7 | Square.C5 | Square.D5 | Square.E7 | Square.F7 | Square.G6 | Square.H7);
@@ -36,7 +36,7 @@ public class BitboardTest
 			() => Assert.Equal((UInt64)Square.E8, testBoard.pieceBB[(int)Chessboard.Material.k]),
 			() => Assert.Equal(15, testBoard.castling),
 			() => Assert.Equal(44, testBoard.enPassant),
-			() => Assert.Equal(0, testBoard.halfMoves)
+			() => Assert.Equal(100, testBoard.halfMoves)
     		);
 	}
 	
