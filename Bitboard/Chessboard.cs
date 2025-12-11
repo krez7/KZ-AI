@@ -124,8 +124,8 @@ namespace Bitboard
                 square[i] = id;
                 id = (id << 1);
             }
-
         }
+
         public Chessboard()
         {
             threeFold = new UInt64[100];
@@ -175,8 +175,8 @@ namespace Bitboard
             tfIndex = 0;
             castling = 0;
 
-            string hm = "";
-            string ep = "";
+            string hm = String.Empty;
+            string ep = String.Empty;
  
             int i = 0;
             int pos = 63;
