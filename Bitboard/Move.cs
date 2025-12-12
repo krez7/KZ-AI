@@ -5,13 +5,14 @@ namespace Bitboard
 {
     public class Move(char pt, int _square, int _to, bool _attack = false, int? _promotion=null, bool _castlingMove=false, bool _isEnPassant=false)
     {
-        public char pieceType = pt;
-        public int square = _square;
-        public int to = _to;
-        public int? promotion = _promotion;
-        public bool attack = _attack;
-        public bool castlingMove = _castlingMove;
-        //public bool isEnPassant = _isEnPassant;
+        public char PieceType {get;} = pt; 
+        public int Square {get;} = _square;
+        public int To {get;} = _to;
+        public int? Promotion {get;} = _promotion;
+        public bool Attack {get;} = _attack;
+        public bool CastlingMove {get;} = _castlingMove;
+        public bool IsEnPassant {get;} = _isEnPassant;
+
         public static (int, int) stringToMove(string strMove)
         {
             return (1, 1);
@@ -19,15 +20,15 @@ namespace Bitboard
 
         public void printMove()
         {
-            Console.WriteLine("Piece type : " + pieceType);
+            Console.WriteLine("Piece type : " + PieceType);
 
-            Console.WriteLine("From : " + square);
+            Console.WriteLine("From : " + Square);
 
-            Console.WriteLine("To : " + to);
+            Console.WriteLine("To : " + To);
 
-            Console.WriteLine("Attack : " + attack);
+            Console.WriteLine("Attack : " + Attack);
 
-            Console.WriteLine("Castling : " + castlingMove);
+            Console.WriteLine("Castling : " + CastlingMove);
         }
 
     }
