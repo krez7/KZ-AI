@@ -1,21 +1,27 @@
 ﻿using System;
 
-
 namespace Bitboard
 {
-    public class Move(char pt, int _square, int _to, bool _attack = false, int? _promotion=null, bool _castlingMove=false, bool _isEnPassant=false)
+    public class Move
     {
-        public char PieceType {get;} = pt; 
-        public int Square {get;} = _square;
-        public int To {get;} = _to;
-        public int? Promotion {get;} = _promotion;
-        public bool Attack {get;} = _attack;
-        public bool CastlingMove {get;} = _castlingMove;
-        public bool IsEnPassant {get;} = _isEnPassant;
+        public char PieceType {get;}
+        public int Square {get;}
+        public int To {get;}
+        public int? Promotion {get;}
+        public bool Attack {get;}
+        public bool CastlingMove {get;}
+        public bool IsEnPassant {get;}
 
-        public static (int, int) stringToMove(string strMove)
+
+        public Move(char pt, int _square, int _to, bool _attack = false, int? _promotion=null, bool _castlingMove=false, bool _isEnPassant=false)
         {
-            return (1, 1);
+            PieceType = pt; 
+            Square = _square;
+            To = _to;
+            Promotion = _promotion;
+            Attack = _attack;
+            CastlingMove = _castlingMove;
+            IsEnPassant = _isEnPassant;
         }
 
         public void printMove()
