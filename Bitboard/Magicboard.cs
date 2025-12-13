@@ -571,7 +571,7 @@ namespace Bitboard
             return threatPawn;
         } 
 
-        public UInt64 getThreat(int sq, bool color, UInt64 colorOccupancy, UInt64 boardOccAdv)
+        public UInt64 GetThreatToKing(int sq, bool color, UInt64 occupancy)
         {
             UInt64 posOppP = !color ? pieceBB[0] : pieceBB[6];
             UInt64 posOppN = !color ? pieceBB[1] : pieceBB[7];
@@ -588,16 +588,15 @@ namespace Bitboard
                 posOppP &= ~square[n];
                 threatMap |= getPawnThreat(n, !color);
             }
-            //printBoard(threatMap);
+
             while (posOppN != 0)
             {
                 int n = LS1BIndex(posOppN);
                 posOppN &= ~square[n];
                 threatMap |= knightAttacks[n];
             }
-            //printBoard(threatMap);
 
-            UInt64 nonKingOccupancy = (colorOccupancy | boardOccAdv) & (~square[sq]);
+            UInt64 nonKingOccupancy = occupancy & ~square[sq];
             while (posOppB != 0)
             {
                 int n = LS1BIndex(posOppB);
@@ -605,39 +604,34 @@ namespace Bitboard
                 threatMap |= getbishopAttackMap(n, nonKingOccupancy);
 
             }
-            //printBoard(threatMap);
+
             while (posOppK != 0)
             {
                 int n = LS1BIndex(posOppK);
                 posOppK &= ~square[n];
                 threatMap |= kingAttacks(n);
             }
-            //printBoard(threatMap);
+
             while (posOppQ != 0)
             {
                 int n = LS1BIndex(posOppQ);
                 posOppQ &= ~square[n];
                 threatMap |= getbishopAttackMap(n, nonKingOccupancy) | getRookAttackMap(n, nonKingOccupancy);
             }
-            //printBoard(threatMap);
+
             while (posOppR != 0)
             {
                 int n = LS1BIndex(posOppR);
                 posOppR &= ~square[n];
-                /*
-                List<Move> moves = new List<Move>();
-                getRookMoves(n, colorOccupancy | boardOccAdv, !color, moves);
-                foreach (Move move in moves) { threatMap |= square[move.to]; }
-                */
                 threatMap |= getRookAttackMap(n, nonKingOccupancy);
             }
 
             return threatMap;
         }
 
-        public bool checkPseudoMove(bool color, UInt64 customOccupancy, UInt64 customOppOccupancy)
+        public bool CheckPseudoMoveKing(bool color, UInt64 customOccupancy, UInt64 customOppOccupancy)
         {
-            UInt64 threatMap = getThreat(LS1BIndex(pieceBB[color ? 3 : 9]), color, customOccupancy, customOppOccupancy);
+            UInt64 threatMap = GetThreatToKing(LS1BIndex(pieceBB[color ? 3 : 9]), color, customOccupancy | customOppOccupancy);
             if ((threatMap & (pieceBB[color ? 3 : 9])) != 0) { return false; }
             return true;
         }
@@ -888,9 +882,9 @@ namespace Bitboard
 
 
             UInt64 attackMap = kingAttacks(sq);
-            UInt64 boardOccAdv = boardOcc(!color);
+            UInt64 oppOccupancy = boardOcc(!color);
 
-            UInt64 threatMap = getThreat(sq, color, colorOccupancy, boardOccAdv);
+            UInt64 threatMap = GetThreatToKing(sq, color, colorOccupancy | oppOccupancy);
 
             if ((threatMap & square[sq]) != 0) {
                 //printChessboard();
@@ -931,7 +925,7 @@ namespace Bitboard
 
             }
 
-            UInt64 attacks = canMove & boardOccAdv;
+            UInt64 attacks = canMove & oppOccupancy;
             canMove &= ~attacks;
             while (attacks != 0)
             {
