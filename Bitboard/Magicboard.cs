@@ -1077,16 +1077,16 @@ namespace Bitboard
             List<Move> list2 = new List<Move>();
             foreach(Move move in list)
             {
-                if (move.attack)
+                if (move.Attack)
                 {
-                    if (checkPseudoMove(color, (square[move.to] | colorOccupancy) & (~square[move.square]), boardOcc(!color)))
+                    if (CheckPseudoMoveKing(color, (square[move.To] | colorOccupancy) & (~square[move.Square]), boardOcc(!color)))
                     {
                         list2.Add(move);
                     }
                 }
                 else
                 {
-                    if (checkPseudoMove(color, (square[move.to] | colorOccupancy) & (~square[move.square]), boardOcc(!color) & (~square[move.to])))
+                    if (CheckPseudoMoveKing(color, (square[move.To] | colorOccupancy) & (~square[move.Square]), boardOcc(!color) & (~square[move.To])))
                     {
                         list2.Add(move);
                     }
@@ -1109,13 +1109,13 @@ namespace Bitboard
             
             bool enpassed = false;
 
-            if (move.attack)
+            if (move.Attack)
             {
-                int t = searchTarget(move.to, color); // TODO : put in check bool as true if t==3 or 9
+                int t = searchTarget(move.To, color); // TODO : put in check bool as true if t==3 or 9
 
                 if ((t == 3) || (t == 9))
                 {                   
-                    printBoard(pieceBB[((int)fromCharPieces[move.pieceType])]);
+                    printBoard(pieceBB[((int)fromCharPieces[move.PieceType])]);
                     Console.WriteLine("nb : " + t);
                     Console.WriteLine(color);
                     printChessboard();
@@ -1123,48 +1123,48 @@ namespace Bitboard
                     //winner = color;
                 }
 
-                if (t != -1) { pieceBB[t] &= ~square[move.to]; } //??
+                if (t != -1) { pieceBB[t] &= ~square[move.To]; } //??
                 halfMoves = 0; //50 moves rule
                 tfIndex = 0;
 
             }
 
-            if ((move.pieceType == 'P') || (move.pieceType == 'p'))          //TODO: handle en passant
+            if ((move.PieceType == 'P') || (move.PieceType == 'p'))          //TODO: handle en passant
             {
-                pieceBB[(int)fromCharPieces[move.pieceType]] &= ~square[move.square];
-                pieceBB[(int)fromCharPieces[move.pieceType]] |= square[move.to];
-                if (move.promotion != null)
+                pieceBB[(int)fromCharPieces[move.PieceType]] &= ~square[move.Square];
+                pieceBB[(int)fromCharPieces[move.PieceType]] |= square[move.To];
+                if (move.Promotion != null)
                 {
-                    pieceBB[(int)move.promotion] |= square[move.to];
-                    pieceBB[(int)fromCharPieces[move.pieceType]] &= ~square[move.to];
+                    pieceBB[(int)move.Promotion] |= square[move.To];
+                    pieceBB[(int)fromCharPieces[move.PieceType]] &= ~square[move.To];
 
                 }
-                if(((move.to-move.square)/8 == 2) && ((boardOcc(true)|boardOcc(false)) & (square[move.to-8])) == 0)
+                if(((move.To-move.Square)/8 == 2) && ((boardOcc(true)|boardOcc(false)) & (square[move.To-8])) == 0)
                 {
-                    enPassant = color ? move.to-8 : move.to+8;
+                    enPassant = color ? move.To-8 : move.To+8;
                     enpassed = true;
                 }
                 halfMoves = 0; //50 moves rule
                 tfIndex = 0;
             }
 
-            else if ((move.pieceType == 'K') || (move.pieceType == 'k'))
+            else if ((move.PieceType == 'K') || (move.PieceType == 'k'))
             {
-                pieceBB[(int)fromCharPieces[move.pieceType]] &= ~square[move.square];
-                pieceBB[(int)fromCharPieces[move.pieceType]] |= square[move.to];
-                if (move.castlingMove)
+                pieceBB[(int)fromCharPieces[move.PieceType]] &= ~square[move.Square];
+                pieceBB[(int)fromCharPieces[move.PieceType]] |= square[move.To];
+                if (move.CastlingMove)
                 {
-                    switch (move.to - move.square)
+                    switch (move.To - move.Square)
                     {
                         case 2:
                             UInt64 rookPos = color ? (UInt64)Square.A1 : (UInt64)Square.A8;
                             pieceBB[color ? 5 : 11] &= ~rookPos;
-                            pieceBB[color ? 5 : 11] |= square[move.to - 1];
+                            pieceBB[color ? 5 : 11] |= square[move.To - 1];
                             break;
                         case -2:
                             rookPos = color ? (UInt64)Square.H1 : (UInt64)Square.H8;
                             pieceBB[color ? 5 : 11] &= ~rookPos;
-                            pieceBB[color ? 5 : 11] |= square[move.to + 1];
+                            pieceBB[color ? 5 : 11] |= square[move.To + 1];
                             break;
                     }
                 }
@@ -1175,13 +1175,13 @@ namespace Bitboard
                 halfMoves++;
             }
 
-            else if ((move.pieceType == 'R') || (move.pieceType == 'r'))          //TODO: handle en passant
+            else if ((move.PieceType == 'R') || (move.PieceType == 'r'))          //TODO: handle en passant
             {
-                pieceBB[(int)fromCharPieces[move.pieceType]] &= ~square[move.square];
-                pieceBB[(int)fromCharPieces[move.pieceType]] |= square[move.to];
+                pieceBB[(int)fromCharPieces[move.PieceType]] &= ~square[move.Square];
+                pieceBB[(int)fromCharPieces[move.PieceType]] |= square[move.To];
                 halfMoves++;
                 if (color) {
-                    switch (move.square)
+                    switch (move.Square)
                     {
                         case 7:
                             castling &= ~((Int16)2);
@@ -1192,7 +1192,7 @@ namespace Bitboard
                     } 
                 }
                 else {
-                    switch (move.square)
+                    switch (move.Square)
                     {
                         case 63:
                             castling &= ~((Int16)8);
@@ -1207,8 +1207,8 @@ namespace Bitboard
 
             else
             {
-                pieceBB[(int)fromCharPieces[move.pieceType]] &= ~square[move.square];
-                pieceBB[(int)fromCharPieces[move.pieceType]] |= square[move.to];
+                pieceBB[(int)fromCharPieces[move.PieceType]] &= ~square[move.Square];
+                pieceBB[(int)fromCharPieces[move.PieceType]] |= square[move.To];
                 halfMoves++;
             }
 
