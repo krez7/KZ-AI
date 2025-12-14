@@ -571,7 +571,7 @@ namespace Bitboard
             return threatPawn;
         } 
 
-        UInt64 GetThreatToKing(int sq, bool color, UInt64 occupancy)
+        UInt64 GetThreatToKing(bool color, UInt64 occupancy)
         {
             UInt64 posOppP = !color ? pieceBB[0] : pieceBB[6];
             UInt64 posOppN = !color ? pieceBB[1] : pieceBB[7];
@@ -579,7 +579,8 @@ namespace Bitboard
             UInt64 posOppK = !color ? pieceBB[3] : pieceBB[9];
             UInt64 posOppQ = !color ? pieceBB[4] : pieceBB[10];
             UInt64 posOppR = !color ? pieceBB[5] : pieceBB[11];
-
+            
+            int sqKing = LS1BIndex(color ? pieceBB[3] : pieceBB[9]);
             UInt64 threatMap = 0;
             //posOppP &= attackMap;
             while (posOppP != 0)
