@@ -95,7 +95,7 @@ namespace Bitboard
                                         9511620013916717316,
                                         580964971481990146];
 
-        static int[] bishopOccRevelancy = [6,5,5,5,5,5,5,6,
+        static int[] bishopOccRelevancy = [6,5,5,5,5,5,5,6,
                                           5,5,5,5,5,5,5,5,
                                           5,5,7,7,7,7,5,5,
                                           5,5,7,9,9,7,5,5,
@@ -105,7 +105,7 @@ namespace Bitboard
                                           6,5,5,5,5,5,5,6];
 
 
-        static int[] rookOccRevelancy = [12,11,11,11,11,11,11,12,
+        static int[] rookOccRelevancy = [12,11,11,11,11,11,11,12,
                                     11,10,10,10,10,10,10,11,
                                     11,10,10,10,10,10,10,11,
                                     11,10,10,10,10,10,10,11,
@@ -250,8 +250,8 @@ namespace Bitboard
 
             for (int i = 0; i < 64; i++)
             {
-                int relevantRook = rookOccRevelancy[i];
-                int relevantBishop = bishopOccRevelancy[i];
+                int relevantRook = rookOccRelevancy[i];
+                int relevantBishop = bishopOccRelevancy[i];
 
                 int occIndexRook = (1 << relevantRook);
                 int occIndexBishop = (1 << relevantBishop);
@@ -480,7 +480,7 @@ namespace Bitboard
         UInt64[] getOccupancies(int pos, bool slidingPiece)
         {
             UInt64 attackMask = slidingPiece ? bishopAttacks[pos] : rookAttacks(pos);
-            int relevance = slidingPiece ? bishopOccRevelancy[pos] : rookOccRevelancy[pos];
+            int relevance = slidingPiece ? bishopOccRelevancy[pos] : rookOccRelevancy[pos];
             int permutationsNB = (1 << (relevance));
             UInt64[] permutations = new UInt64[permutationsNB];
             for (int i = 0; i < permutationsNB; i++)
@@ -495,7 +495,7 @@ namespace Bitboard
         {
             UInt64[] occAttacks = new UInt64[occupancies.Length];
             
-            int relevance = slidingPiece ? bishopOccRevelancy[square] : rookOccRevelancy[square];
+            int relevance = slidingPiece ? bishopOccRelevancy[square] : rookOccRelevancy[square];
             //Console.WriteLine(relevance);
             for (int i = 0; i < occupancies.Length; i++)
             {
@@ -536,7 +536,7 @@ namespace Bitboard
         {
             occupancy &= bishopAttacks[sq];
             occupancy *= magicsBishop[sq];
-            occupancy >>= 64 - bishopOccRevelancy[sq];
+            occupancy >>= 64 - bishopOccRelevancy[sq];
             return bishopAttackTable[sq, occupancy];
         }
 
@@ -544,7 +544,7 @@ namespace Bitboard
         {
             occupancy &= rookAttacks(sq);
             occupancy *= magicsRook[sq];
-            occupancy >>= 64 - rookOccRevelancy[sq];
+            occupancy >>= 64 - rookOccRelevancy[sq];
             return rookAttackTable[sq, occupancy];
         }
 
@@ -650,7 +650,7 @@ namespace Bitboard
             UInt64 magicKey = colorOccupancy|boardOcc(!color);
             magicKey &= bishopAttacks[sq];
             magicKey *= magicsBishop[sq];
-            magicKey >>= 64 - bishopOccRevelancy[sq];
+            magicKey >>= 64 - bishopOccRelevancy[sq];
             UInt64 possibleMoves = bishopAttackTable[sq, magicKey];
 
             
@@ -693,7 +693,7 @@ namespace Bitboard
             UInt64 magicKey = colorOccupancy | boardOcc(!color);
             magicKey &= rookAttacks(sq);
             magicKey *= magicsRook[sq];
-            magicKey >>= 64 - rookOccRevelancy[sq];
+            magicKey >>= 64 - rookOccRelevancy[sq];
 
             UInt64 possibleMoves = rookAttackTable[sq, magicKey];
             
