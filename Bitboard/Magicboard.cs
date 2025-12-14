@@ -571,7 +571,7 @@ namespace Bitboard
             return threatPawn;
         } 
 
-        UInt64 GetThreatToKing(bool color, UInt64 occupancy)
+        public UInt64 GetThreatToKing(bool color, UInt64 occupancy)
         {
             UInt64 posOppP = !color ? pieceBB[0] : pieceBB[6];
             UInt64 posOppN = !color ? pieceBB[1] : pieceBB[7];
@@ -597,7 +597,7 @@ namespace Bitboard
                 threatMap |= knightAttacks[n];
             }
 
-            UInt64 nonKingOccupancy = occupancy & ~square[sq];
+            UInt64 nonKingOccupancy = occupancy & ~square[sqKing];
             while (posOppB != 0)
             {
                 int n = LS1BIndex(posOppB);
@@ -632,7 +632,7 @@ namespace Bitboard
 
         bool CheckPseudoMoveKing(bool color, UInt64 customOccupancy, UInt64 customOppOccupancy)
         {
-            UInt64 threatMap = GetThreatToKing(LS1BIndex(pieceBB[color ? 3 : 9]), color, customOccupancy | customOppOccupancy);
+            UInt64 threatMap = GetThreatToKing(color, customOccupancy | customOppOccupancy);
             if ((threatMap & (pieceBB[color ? 3 : 9])) != 0) { return false; }
             return true;
         }
@@ -885,7 +885,7 @@ namespace Bitboard
             UInt64 attackMap = kingAttacks(sq);
             UInt64 oppOccupancy = boardOcc(!color);
 
-            UInt64 threatMap = GetThreatToKing(sq, color, colorOccupancy | oppOccupancy);
+            UInt64 threatMap = GetThreatToKing(color, colorOccupancy | oppOccupancy);
 
             if ((threatMap & square[sq]) != 0) {
                 //printChessboard();
