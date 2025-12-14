@@ -9,8 +9,8 @@ namespace Bitboard
 {
     public class Magicboard : Chessboard
     {      
-        public static UInt64[] bishopAttacks;
-        public static UInt64[] knightAttacks;
+        static UInt64[] bishopAttacks;
+        static UInt64[] knightAttacks;
         //public UInt64[] rookAttackse;
 
         /*public UInt64[,] bishopOccupancy;
@@ -21,7 +21,7 @@ namespace Bitboard
 
         static UInt64[,] bishopAttackTable = new UInt64[64,512];
 
-        public static UInt64[] magicsBishop = [297272778304864576, 4617351810504655876, 4525591006554208, 2260875080368132, 565217697202730, 9224537656755488770, 4651093631902417154, 2816953152569858,
+        static UInt64[] magicsBishop = [297272778304864576, 4617351810504655876, 4525591006554208, 2260875080368132, 565217697202730, 9224537656755488770, 4651093631902417154, 2816953152569858,
 13835137359772942880, 4613410062331873537, 324558311208845824, 9290916238196770, 36353681408016, 1151590473752, 18726075238912, 10664594578448912640,
 4701971385026085024, 1130332582609416, 2666427091645759504, 81100295526170944, 43910923158553088, 1830738668324898, 142940941353509, 9223943921430954248,
 19351417837987840, 2287061629571217, 74313792032354336, 2956621952544014338, 9223654611344179200, 144186106592665608, 1157570343284573188, 90153975185179648,
@@ -30,7 +30,7 @@ namespace Bitboard
 2310628702362292256, 36318278066728, 1119510859776, 5240967529472, 5278229829295153152, 2310416995436235048, 2308167960944185344, 1191221102408646657,
 2271595586946048, 703842131117072, 2256751919927372, 11258999072752128, 20301382999474693, 4665870235180597376, 4612002686400200976, 4692772806286114952];
 
-        public static UInt64[] magicsRook =    [36035949213274145,
+        static UInt64[] magicsRook =    [36035949213274145,
                                         162129861731950592,
                                         10412331684866297856,
                                         3602888516244087296,
@@ -95,7 +95,7 @@ namespace Bitboard
                                         9511620013916717316,
                                         580964971481990146];
 
-        public static int[] bishopOccRevelancy = [6,5,5,5,5,5,5,6,
+        static int[] bishopOccRevelancy = [6,5,5,5,5,5,5,6,
                                           5,5,5,5,5,5,5,5,
                                           5,5,7,7,7,7,5,5,
                                           5,5,7,9,9,7,5,5,
@@ -105,7 +105,7 @@ namespace Bitboard
                                           6,5,5,5,5,5,5,6];
 
 
-        public static int[] rookOccRevelancy = [12,11,11,11,11,11,11,12,
+        static int[] rookOccRevelancy = [12,11,11,11,11,11,11,12,
                                     11,10,10,10,10,10,10,11,
                                     11,10,10,10,10,10,10,11,
                                     11,10,10,10,10,10,10,11,
@@ -276,7 +276,7 @@ namespace Bitboard
             }
         }
 
-        public UInt64 kingAttacks(int sq) // formerly attPatternKing
+        UInt64 kingAttacks(int sq) // formerly attPatternKing
         {
             UInt64 pos = square[sq];
             UInt64 pattern = 0;
@@ -331,7 +331,7 @@ namespace Bitboard
         }
         */
  
-        public static UInt64 bishopAttacksOcc(UInt64 mask, int pos)
+        static UInt64 bishopAttacksOcc(UInt64 mask, int pos)
         {
             
             UInt64 squarePos = square[pos];
@@ -391,7 +391,7 @@ namespace Bitboard
             attack &= ~squarePos;
             return attack;
         }
-        public static UInt64 rookAttacks(int pos)
+        static UInt64 rookAttacks(int pos)
         {
             int i = pos / 8;
             int j = (pos % 8);
@@ -406,7 +406,7 @@ namespace Bitboard
 
         }
         
-        public static UInt64 rookAttacksOcc(UInt64 mask, int pos)
+        static UInt64 rookAttacksOcc(UInt64 mask, int pos)
         {
             mask &= ~square[pos];
             int i = pos / 8; //vérifer validité
@@ -458,7 +458,7 @@ namespace Bitboard
             return attack;
         }
 
-        public static UInt64 listOccupancy(int position, int permutationIndex, bool slidingPiece)
+        static UInt64 listOccupancy(int position, int permutationIndex, bool slidingPiece)
         {
             UInt64 boardPos = ((UInt64)1 << position);
             Debug.Assert(bitCount(boardPos)==1);
@@ -477,7 +477,7 @@ namespace Bitboard
             return occupancy;
         }
 
-        public UInt64[] getOccupancies(int pos, bool slidingPiece)
+        UInt64[] getOccupancies(int pos, bool slidingPiece)
         {
             UInt64 attackMask = slidingPiece ? bishopAttacks[pos] : rookAttacks(pos);
             int relevance = slidingPiece ? bishopOccRevelancy[pos] : rookOccRevelancy[pos];
@@ -491,7 +491,7 @@ namespace Bitboard
         }
 
 
-        public UInt64 findMagic(int iterations, int square, UInt64[] occupancies, UInt64 attackMask, bool slidingPiece) // 1 for bishop, 2 for rook
+        UInt64 findMagic(int iterations, int square, UInt64[] occupancies, UInt64 attackMask, bool slidingPiece) // 1 for bishop, 2 for rook
         {
             UInt64[] occAttacks = new UInt64[occupancies.Length];
             
@@ -548,7 +548,7 @@ namespace Bitboard
             return rookAttackTable[sq, occupancy];
         }
 
-        public UInt64 getPawnThreat(int sq, bool color){
+        UInt64 getPawnThreat(int sq, bool color){
             UInt64 threatPawn = 0, squareUint64 = square[sq];
             if(color){
                 if(sq%8 != 0) threatPawn |= square[sq + 7];
@@ -571,7 +571,7 @@ namespace Bitboard
             return threatPawn;
         } 
 
-        public UInt64 GetThreatToKing(int sq, bool color, UInt64 occupancy)
+        UInt64 GetThreatToKing(int sq, bool color, UInt64 occupancy)
         {
             UInt64 posOppP = !color ? pieceBB[0] : pieceBB[6];
             UInt64 posOppN = !color ? pieceBB[1] : pieceBB[7];
@@ -629,13 +629,13 @@ namespace Bitboard
             return threatMap;
         }
 
-        public bool CheckPseudoMoveKing(bool color, UInt64 customOccupancy, UInt64 customOppOccupancy)
+        bool CheckPseudoMoveKing(bool color, UInt64 customOccupancy, UInt64 customOppOccupancy)
         {
             UInt64 threatMap = GetThreatToKing(LS1BIndex(pieceBB[color ? 3 : 9]), color, customOccupancy | customOppOccupancy);
             if ((threatMap & (pieceBB[color ? 3 : 9])) != 0) { return false; }
             return true;
         }
-        public void getBishopMoves(int sq, UInt64 colorOccupancy, bool color, List<Move> moves, bool queen=false)
+        void getBishopMoves(int sq, UInt64 colorOccupancy, bool color, List<Move> moves, bool queen=false)
         {
             char piece;
             if (color) {             //UPPERCASE FASTER ??
@@ -676,7 +676,7 @@ namespace Bitboard
                 }
             }
         }
-        public void getRookMoves(int sq, UInt64 colorOccupancy, bool color, List<Move> moves, bool queen=false)
+        void getRookMoves(int sq, UInt64 colorOccupancy, bool color, List<Move> moves, bool queen=false)
         {
             char piece;
             if (color)
@@ -723,14 +723,14 @@ namespace Bitboard
             }
         }
 
-        public void getQueenMoves(int square, UInt64 occupancy, bool color, List<Move> moves)
+        void getQueenMoves(int square, UInt64 occupancy, bool color, List<Move> moves)
         {
             getBishopMoves(square, occupancy, color, moves, true); 
             getRookMoves(square, occupancy, color, moves, true);
         }
 
         
-        public void getPawnMoves(int sq, UInt64 occupancy, bool color, List<Move> moves) // can use LS1B maybe ??
+        void getPawnMoves(int sq, UInt64 occupancy, bool color, List<Move> moves) // can use LS1B maybe ??
         {
             int i = sq / 8;
             int j = 7-(sq % 8);
@@ -833,7 +833,7 @@ namespace Bitboard
             }
         }
 
-        public void getKnightMoves(int sq, UInt64 occupancy, bool color, List<Move> moves)
+        void getKnightMoves(int sq, UInt64 occupancy, bool color, List<Move> moves)
         {
            
             UInt64 opColorOccupancy = boardOcc(!color);
@@ -860,7 +860,7 @@ namespace Bitboard
         public UInt64 getOppThreats(bool color)
         {
             UInt64 occupancy = boardOcc(color) | boardOcc(!color);
-            UInt64 threatMap = 0;
+            UInt64 threatMap = 0;:
 
             List<Move> moves = new List<Move>();
             UInt64 posOppP = color ? pieceBB[0] : pieceBB[6];
@@ -874,7 +874,7 @@ namespace Bitboard
             foreach (Move move in getPawnMoves())
         }
         */
-        public void getKingMoves(int sq, UInt64 colorOccupancy, bool color, List<Move> kingMoves)
+        void getKingMoves(int sq, UInt64 colorOccupancy, bool color, List<Move> kingMoves)
         {           
             char piece;
             if (color){ piece = 'K'; }
@@ -944,7 +944,7 @@ namespace Bitboard
             }
         }
 
-        public int searchTarget(int n, bool color)
+        int searchTarget(int n, bool color)
         {
             int offset = color ? 6 : 0;
             for (int i = offset; i < 12; i++)
@@ -954,7 +954,7 @@ namespace Bitboard
             return -1;
         }
 
-        public bool checkForUnsufficientMaterial()
+        bool checkForUnsufficientMaterial()
         {
             if ((pieceBB[0] | pieceBB[6] | pieceBB[4] | pieceBB[10] | pieceBB[5] | pieceBB[11]) == 0){
                 if ((bitCount(pieceBB[1] | pieceBB[2]) <= 1) && (bitCount(pieceBB[7] | pieceBB[8]) <= 1))
@@ -966,7 +966,7 @@ namespace Bitboard
             return false;
         }
 
-        public bool checkForThreeFoldRepetition()
+        bool checkForThreeFoldRepetition()
         {
             UInt64 key = generateHash();
             bool repetition = false;
@@ -988,7 +988,7 @@ namespace Bitboard
             return false;
         }
 
-        public bool checkStalemate()
+        bool checkStalemate()
         {
             List<Move> list = getMoves(!side);
             if(list.Count == 0) {
