@@ -648,12 +648,8 @@ namespace Bitboard
                 if (queen) { piece = 'q'; }
                 else { piece = 'b'; }
             }
-            UInt64 magicKey = colorOccupancy|boardOcc(!color);
-            magicKey &= bishopAttacks[sq];
-            magicKey *= magicsBishop[sq];
-            magicKey >>= 64 - bishopOccRelevancy[sq];
-            UInt64 possibleMoves = bishopAttackTable[sq, magicKey];
-
+            
+            UInt64 possibleMoves = getbishopAttackMap(sq, colorOccupancy|boardOcc(!color));
             
             UInt64 attackMoves = possibleMoves & boardOcc(!color);
             possibleMoves &= ~attackMoves;
@@ -691,13 +687,8 @@ namespace Bitboard
                 else { piece = 'b'; }
             }
 
-            UInt64 magicKey = colorOccupancy | boardOcc(!color);
-            magicKey &= rookAttacks(sq);
-            magicKey *= magicsRook[sq];
-            magicKey >>= 64 - rookOccRelevancy[sq];
-
-            UInt64 possibleMoves = rookAttackTable[sq, magicKey];
-            
+            UInt64 possibleMoves = getRookAttackMap(sq, colorOccupancy|boardOcc(!color));
+          
             UInt64 attackMoves = possibleMoves & boardOcc(!color);
             possibleMoves &= ~attackMoves;
             while (attackMoves != 0)
