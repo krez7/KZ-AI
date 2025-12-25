@@ -691,13 +691,13 @@ namespace Bitboard
             while (possibleCaptures != 0)
             {
                 int id = LS1BIndex(possibleCaptures);
-                possibleCaptures = possibleCaptures & ~square[id];
+                possibleCaptures &= ~square[id];
                 moves.Add(new Move(piece, sq, id, true));
             }
             while (possibleMoves != 0)
             {
                 int id = LS1BIndex(possibleMoves);
-                possibleMoves = possibleMoves & ~square[id];
+                possibleMoves &= ~square[id];
                 moves.Add(new Move(piece, sq, id, false));
             }
         }
@@ -715,11 +715,10 @@ namespace Bitboard
             int j = 7-(sq % 8);
 
             UInt64 colorOccupancy = boardOcc(!color);
-            //en peasant
 
             if (color)
             {
-                if ((enPassant != -1) && ((sq == (enPassant - 7)) || (sq == (enPassant - 9)))) //vérifier si la case est vide
+                if ((enPassant != -1) && ((sq == (enPassant - 7)) || (sq == (enPassant - 9))))
                 {
                     moves.Add(new Move('P', sq, enPassant, true));
                 }
@@ -817,7 +816,7 @@ namespace Bitboard
            
             UInt64 opColorOccupancy = boardOcc(!color);
             UInt64 possibleMoves = knightAttacks[sq] & ~occupancy & ~opColorOccupancy;
-            UInt64 possibleCaptures= possibleMoves & opColorOccupancy;
+            UInt64 possibleCaptures = possibleMoves & opColorOccupancy;
             UInt64 possibleNonAttacking = possibleMoves &~possibleCaptures;
             while (possibleCaptures != 0)
             {
@@ -865,7 +864,6 @@ namespace Bitboard
             UInt64 threatMap = GetThreatToKing(color, colorOccupancy | oppOccupancy, sq);
 
             if ((threatMap & square[sq]) != 0) {
-                //printChessboard();
                 isInCheck = true;                
                 //Console.WriteLine(color);
             }
@@ -1082,7 +1080,7 @@ namespace Bitboard
 
                 if ((t == 3) || (t == 9))
                 {                   
-                    printBoard(pieceBB[((int)fromCharPieces[move.PieceType])]);
+                    printBoard(pieceBB[(int)fromCharPieces[move.PieceType]]);
                     Console.WriteLine("nb : " + t);
                     Console.WriteLine(color);
                     printChessboard();
@@ -1185,7 +1183,7 @@ namespace Bitboard
                 enPassant = -1;
             }
 
-            if((halfMoves>=100) || (checkForUnsufficientMaterial()) || (checkForThreeFoldRepetition()) || (checkStalemate()))
+            if((halfMoves>=100) || checkForUnsufficientMaterial() || checkForThreeFoldRepetition() || checkStalemate())
             {
                 gameHasEnded = true;
             }
