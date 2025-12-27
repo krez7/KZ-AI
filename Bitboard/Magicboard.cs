@@ -640,7 +640,7 @@ namespace Bitboard
             if ((threatMap & pieceBB[color ? 3 : 9]) != 0) { return false; }
             return true;
         }
-        void getBishopPseudoMoves(int sq, UInt64 colorOccupancy, bool color, List<Move> moves, bool queen=false)
+        public void getBishopPseudoMoves(int sq, UInt64 colorOccupancy, bool color, List<Move> moves, bool queen=false)
         {
             char piece;
             if (color) {             //UPPERCASE FASTER ??
@@ -670,7 +670,7 @@ namespace Bitboard
                 moves.Add(new Move(piece, sq, id, false));
             }
         }
-        void getRookPseudoMoves(int sq, UInt64 colorOccupancy, bool color, List<Move> moves, bool queen=false)
+        public void getRookPseudoMoves(int sq, UInt64 colorOccupancy, bool color, List<Move> moves, bool queen=false)
         {
             char piece;
             if (color)
@@ -702,14 +702,14 @@ namespace Bitboard
             }
         }
 
-        void getQueenPseudoMoves(int square, UInt64 occupancy, bool color, List<Move> moves)
+        public void getQueenPseudoMoves(int square, UInt64 occupancy, bool color, List<Move> moves)
         {
             getBishopPseudoMoves(square, occupancy, color, moves, true); 
             getRookPseudoMoves(square, occupancy, color, moves, true);
         }
 
         
-        void getPawnPseudoMoves(int sq, UInt64 occupancy, bool color, List<Move> moves) // can use LS1B maybe ??
+        public void getPawnPseudoMoves(int sq, UInt64 occupancy, bool color, List<Move> moves) // can use LS1B maybe ??
         {
             int i = sq / 8;
             int j = 7-(sq % 8);
@@ -811,7 +811,7 @@ namespace Bitboard
             }
         }
 
-        void getKnightPseudoMoves(int sq, UInt64 occupancy, bool color, List<Move> moves)
+        public void getKnightPseudoMoves(int sq, UInt64 occupancy, bool color, List<Move> moves)
         {
            
             UInt64 oppOccupancy = boardOcc(!color);
@@ -851,7 +851,7 @@ namespace Bitboard
             foreach (Move move in getPawnMoves())
         }
         */
-        void getKingMoves(int sq, UInt64 colorOccupancy, bool color, List<Move> kingMoves)
+        public void getKingMoves(int sq, UInt64 colorOccupancy, bool color, List<Move> kingMoves)
         {           
             char piece;
             if (color){ piece = 'K'; }
