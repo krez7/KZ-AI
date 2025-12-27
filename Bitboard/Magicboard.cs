@@ -656,17 +656,17 @@ namespace Bitboard
             UInt64 possibleMoves = getbishopAttackMap(sq, colorOccupancy|boardOcc(!color));
             
             UInt64 possibleCaptures = possibleMoves & boardOcc(!color);
-            UInt64 possibleNonAttacking = possibleMoves & ~possibleCaptures & ~colorOccupancy;
+            UInt64 possibleQuiet = possibleMoves & ~possibleCaptures & ~colorOccupancy;
             while (possibleCaptures != 0)
             {
                 int id = LS1BIndex(possibleCaptures);
                 possibleCaptures &= ~square[id];
                 moves.Add(new Move(piece, sq, id, true));
             }
-            while (possibleNonAttacking != 0)
+            while (possibleQuiet != 0)
             {
-                int id = LS1BIndex(possibleNonAttacking);
-                possibleNonAttacking &= ~square[id];
+                int id = LS1BIndex(possibleQuiet);
+                possibleQuiet &= ~square[id];
                 moves.Add(new Move(piece, sq, id, false));
             }
         }
@@ -687,16 +687,16 @@ namespace Bitboard
             UInt64 possibleMoves = getRookAttackMap(sq, colorOccupancy|boardOcc(!color));
           
             UInt64 possibleCaptures = possibleMoves & boardOcc(!color);
-            UInt64 possibleNonAttacking = possibleMoves & ~possibleCaptures & ~colorOccupancy;
+            UInt64 possibleQuiet = possibleMoves & ~possibleCaptures & ~colorOccupancy;
             while (possibleCaptures != 0)
             {
                 int id = LS1BIndex(possibleCaptures);
                 possibleCaptures &= ~square[id];
                 moves.Add(new Move(piece, sq, id, true));
             }
-            while (possibleNonAttacking != 0)
+            while (possibleQuiet != 0)
             {
-                int id = LS1BIndex(possibleNonAttacking);
+                int id = LS1BIndex(possibleQuiet);
                 possibleMoves &= ~square[id];
                 moves.Add(new Move(piece, sq, id, false));
             }
@@ -714,7 +714,7 @@ namespace Bitboard
             int i = sq / 8;
             int j = 7-(sq % 8);
 
-            UInt64 colorOccupancy = boardOcc(!color);
+            UInt64 oppOccupancy = boardOcc(!color);
 
             if (color)
             {
@@ -741,7 +741,7 @@ namespace Bitboard
                     if((square[sq + 16] & occupancy) == 0)moves.Add(new Move('P', sq, sq + 16, false));
                 }
 
-                if ((j < 7) && (square[sq + 9] & colorOccupancy) != 0)
+                if ((j < 7) && (square[sq + 9] & oppOccupancy) != 0)
                 {
                     if (promotable)
                     {
@@ -752,7 +752,7 @@ namespace Bitboard
                 }
 
 
-                if ((j >= 0) && (square[sq + 7] & colorOccupancy) != 0)
+                if ((j >= 0) && (square[sq + 7] & oppOccupancy) != 0)
                 {
                     if (promotable)
                     {
@@ -788,7 +788,7 @@ namespace Bitboard
                     if((square[sq + 16] & occupancy) == 0)moves.Add(new Move('P', sq, sq + 16, false));
                 }
 
-                if ((j < 7) && (square[sq + 9] & colorOccupancy) != 0)
+                if ((j < 7) && (square[sq + 9] & oppOccupancy) != 0)
                 {
                     if (promotable)
                     {
@@ -799,7 +799,7 @@ namespace Bitboard
                 }
 
 
-                if ((j >= 0) && (square[sq + 7] & colorOccupancy) != 0)
+                if ((j >= 0) && (square[sq + 7] & oppOccupancy) != 0)
                 {
                     if (promotable)
                     {
@@ -814,10 +814,10 @@ namespace Bitboard
         void getKnightPseudoMoves(int sq, UInt64 occupancy, bool color, List<Move> moves)
         {
            
-            UInt64 opColorOccupancy = boardOcc(!color);
-            UInt64 possibleMoves = knightAttacks[sq] & ~occupancy & ~opColorOccupancy;
-            UInt64 possibleCaptures = possibleMoves & opColorOccupancy;
-            UInt64 possibleNonAttacking = possibleMoves &~possibleCaptures;
+            UInt64 oppOccupancy = boardOcc(!color);
+            UInt64 possibleMoves = knightAttacks[sq] & ~occupancy & ~oppOccupancy;
+            UInt64 possibleCaptures = possibleMoves & oppOccupancy;
+            UInt64 possibleQuiet = possibleMoves &~possibleCaptures;
             while (possibleCaptures != 0)
             {
                 int id = LS1BIndex(possibleCaptures);
@@ -825,10 +825,10 @@ namespace Bitboard
                 moves.Add(color ? new Move('N', sq, id, true) : new Move('n', sq, id, true));
             
             }
-            while (possibleNonAttacking != 0)
+            while (possibleQuiet != 0)
             {
-                int id = LS1BIndex(possibleNonAttacking);
-                possibleNonAttacking &= ~square[id];
+                int id = LS1BIndex(possibleQuiet);
+                possibleQuiet &= ~square[id];
                 moves.Add(color ? new Move('N', sq, id, false) : new Move('n', sq, id, false));
             }
         }
@@ -869,9 +869,9 @@ namespace Bitboard
             }
             
             //printBoard(threatMap);
-            UInt64 canMove = kingAttacks(sq) & (~threatMap);
-            
-            canMove &= ~colorOccupancy;
+            UInt64 possibleMoves = kingAttacks(sq) & (~threatMap);
+
+            possibleMoves &= ~colorOccupancy;
             //UInt64 baseRank = color ? ranks[0] : ranks[7];
             switch(color)
             {
@@ -901,20 +901,20 @@ namespace Bitboard
 
             }
 
-            UInt64 attacks = canMove & oppOccupancy;
-            canMove &= ~attacks;
-            while (attacks != 0)
+            UInt64 possibleCaptures = possibleMoves & oppOccupancy;
+            possibleMoves &= ~possibleCaptures;
+            while (possibleCaptures!= 0)
             {
-                int n = LS1BIndex(attacks);
-                attacks &= ~square[n];
+                int n = LS1BIndex(possibleCaptures);
+                possibleCaptures &= ~square[n];
                 kingMoves.Add(new Move(piece, sq, n, true));
 
             }
             
-            while (canMove != 0)
+            while (possibleMoves != 0)
             {
-                int n = LS1BIndex(canMove);
-                canMove &= ~square[n];
+                int n = LS1BIndex(possibleMoves);
+                possibleMoves &= ~square[n];
                 kingMoves.Add(new Move(piece, sq, n, false));
 
             }
