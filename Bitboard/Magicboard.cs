@@ -694,9 +694,9 @@ namespace Bitboard
                 possibleCaptures &= ~square[id];
                 moves.Add(new Move(piece, sq, id, true));
             }
-            while (possibleMoves != 0)
+            while (possibleNonAttacking != 0)
             {
-                int id = LS1BIndex(possibleMoves);
+                int id = LS1BIndex(possibleNonAttacking);
                 possibleMoves &= ~square[id];
                 moves.Add(new Move(piece, sq, id, false));
             }
