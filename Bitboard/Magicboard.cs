@@ -815,9 +815,9 @@ namespace Bitboard
         {
            
             UInt64 oppOccupancy = boardOcc(!color);
-            UInt64 possibleMoves = knightAttacks[sq] & ~occupancy & ~oppOccupancy;
+            UInt64 possibleMoves = knightAttacks[sq];
             UInt64 possibleCaptures = possibleMoves & oppOccupancy;
-            UInt64 possibleQuiet = possibleMoves &~possibleCaptures;
+            UInt64 possibleQuiet = possibleMoves & ~occupancy;
             while (possibleCaptures != 0)
             {
                 int id = LS1BIndex(possibleCaptures);
