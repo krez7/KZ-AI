@@ -630,7 +630,7 @@ namespace Bitboard
             return threatMap;
         }
 
-        bool CheckPseudoMove(bool color, Move move)
+        public bool CheckPseudoMove(bool color, Move move)
         {
             UInt64 threatMap;
             UInt64 occupancy = square[move.To] | (boardOcc(white) | boardOcc(black)) & ~square[move.Square];
