@@ -8,7 +8,7 @@ class Program
     {
         Console.WriteLine("KZ-Bot - v0.0.0");
         
-        Magicboard board;
+        Magicboard board = new Magicboard();
         bool correctInput = false;
 
         /////////MAIN MENU//////////
@@ -20,7 +20,6 @@ class Program
             string? option = Console.ReadLine();
             if(option == "1"){
                 correctInput = true;
-                board = new Magicboard();
             }
             else if(option == "2"){
                 Console.WriteLine("Enter FEN: ");
