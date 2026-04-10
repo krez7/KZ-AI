@@ -34,7 +34,7 @@ class Program
         }
         
         /////////Color selection/////////
-        bool playerColor;
+        bool playerColor = Chessboard.white;
         correctInput = false;
         
         Console.Write("Select your color(b/w): ");
