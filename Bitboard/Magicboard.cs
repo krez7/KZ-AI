@@ -635,7 +635,7 @@ namespace Bitboard
             UInt64 threatMap;
             UInt64 occupancy = square[move.To] | (boardOcc(white) | boardOcc(black)) & ~square[move.Square];
             
-            if(move.Attack) threatMap = GetThreatToKing(color, occupancy, move.IsEnPassant ? enPassant : move.To);
+            if(move.Attack) threatMap = GetThreatToKing(color, occupancy, move.To);
             else threatMap = GetThreatToKing(color, occupancy, move.Square);
             if ((threatMap & pieceBB[color ? 3 : 9]) != 0) { return false; }
             return true;
