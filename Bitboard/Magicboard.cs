@@ -712,7 +712,7 @@ namespace Bitboard
         public void getPawnPseudoMoves(int sq, UInt64 occupancy, bool color, List<Move> moves) // can use LS1B maybe ??
         {
             int i = sq / 8;
-            int j = 7-(sq % 8);
+            int j = sq % 8;
 
             UInt64 oppOccupancy = boardOcc(!color);
 
@@ -751,7 +751,7 @@ namespace Bitboard
                 }
 
 
-                if ((j >= 0) && (square[sq + 7] & oppOccupancy) != 0)
+                if ((j > 0) && (square[sq + 7] & oppOccupancy) != 0)
                 {
                     if (promotable)
                     {
@@ -797,7 +797,7 @@ namespace Bitboard
                 }
 
 
-                if ((j >= 0) && (square[sq - 9] & oppOccupancy) != 0)
+                if ((j > 0) && (square[sq - 9] & oppOccupancy) != 0)
                 {
                     if (promotable)
                     {
