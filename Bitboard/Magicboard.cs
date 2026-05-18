@@ -765,48 +765,48 @@ namespace Bitboard
 
             else
             {
-                if ((enPassant != -1) && ((sq == (enPassant - 7)) || (sq == (enPassant - 9)))) //vérifier si la case est vide
+                if ((enPassant != -1) && ((sq == (enPassant + 7)) || (sq == (enPassant + 9)))) //vérifier si la case est vide
                 {
                     moves.Add(new Move('P', sq, enPassant, true));
                 }
-                bool promotable = i == 6;
+                bool promotable = i == 1;
 
-                if (i < 7 && (square[sq + 8] & occupancy) == 0)
+                if (i > 0 && (square[sq - 8] & occupancy) == 0)
                 {
                     if (promotable) 
                     {                 
-                            moves.Add(new Move('P', sq, sq + 8, false, 1));
-                            moves.Add(new Move('P', sq, sq + 8, false, 4));
+                            moves.Add(new Move('P', sq, sq - 8, false, 1));
+                            moves.Add(new Move('P', sq, sq - 8, false, 4));
                     }
-                    else { moves.Add(new Move('p', sq, sq + 8, false)); }
+                    else { moves.Add(new Move('p', sq, sq - 8, false)); }
                 }
 
 
-                if (i == 1)
+                if (i == 6)
                 {
-                    if((square[sq + 8] & occupancy) == 0)  moves.Add(new Move('P', sq, sq + 8, false));
-                    if((square[sq + 16] & occupancy) == 0)moves.Add(new Move('P', sq, sq + 16, false));
+                    if((square[sq - 8] & occupancy) == 0)  moves.Add(new Move('P', sq, sq - 8, false));
+                    if((square[sq - 16] & occupancy) == 0)moves.Add(new Move('P', sq, sq - 16, false));
                 }
 
-                if ((j < 7) && (square[sq + 9] & oppOccupancy) != 0)
-                {
-                    if (promotable)
-                    {
-                        moves.Add(new Move('P', sq, sq + 9, true, 1));
-                        moves.Add(new Move('P', sq, sq + 9, true, 4));
-                    }
-                    else { moves.Add(new Move('P', sq, sq + 9, true)); }
-                }
-
-
-                if ((j >= 0) && (square[sq + 7] & oppOccupancy) != 0)
+                if ((j < 7) && (square[sq - 7] & oppOccupancy) != 0)
                 {
                     if (promotable)
                     {
-                        moves.Add(new Move('P', sq, sq + 7, true, 1));
-                        moves.Add(new Move('P', sq, sq + 7, true, 4));
+                        moves.Add(new Move('P', sq, sq - 7, true, 1));
+                        moves.Add(new Move('P', sq, sq - 7, true, 4));
                     }
-                    else { moves.Add(new Move('P', sq, sq + 7, true)); }
+                    else { moves.Add(new Move('P', sq, sq - 7, true)); }
+                }
+
+
+                if ((j >= 0) && (square[sq - 9] & oppOccupancy) != 0)
+                {
+                    if (promotable)
+                    {
+                        moves.Add(new Move('P', sq, sq - 9, true, 1));
+                        moves.Add(new Move('P', sq, sq - 9, true, 4));
+                    }
+                    else { moves.Add(new Move('P', sq, sq - 9, true)); }
                 }
             }
         }
