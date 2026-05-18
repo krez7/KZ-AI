@@ -737,7 +737,6 @@ namespace Bitboard
 
                 if (i == 1)
                 {
-                    if((square[sq + 8] & occupancy) == 0)  moves.Add(new Move('P', sq, sq + 8, false));
                     if((square[sq + 16] & occupancy) == 0)moves.Add(new Move('P', sq, sq + 16, false));
                 }
 
@@ -784,7 +783,6 @@ namespace Bitboard
 
                 if (i == 6)
                 {
-                    if((square[sq - 8] & occupancy) == 0)  moves.Add(new Move('P', sq, sq - 8, false));
                     if((square[sq - 16] & occupancy) == 0)moves.Add(new Move('P', sq, sq - 16, false));
                 }
 
