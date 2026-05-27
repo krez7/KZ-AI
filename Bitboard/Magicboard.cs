@@ -733,7 +733,7 @@ namespace Bitboard
                             moves.Add(new Move('P', sq, sq + 8, false, 4));
                             moves.Add(new Move('P', sq, sq + 8, false, 5));
                     }
-                    else { moves.Add(new Move('p', sq, sq + 8, false)); }
+                    else { moves.Add(new Move('P', sq, sq + 8, false)); }
                 }
 
 
@@ -772,7 +772,7 @@ namespace Bitboard
             {
                 if ((enPassant != -1) && ((sq == (enPassant + 7)) || (sq == (enPassant + 9)))) //vérifier si la case est vide
                 {
-                    moves.Add(new Move('P', sq, enPassant, true));
+                    moves.Add(new Move('p', sq, enPassant, true));
                 }
                 bool promotable = i == 1;
 
@@ -780,10 +780,10 @@ namespace Bitboard
                 {
                     if (promotable) 
                     {                 
-                            moves.Add(new Move('P', sq, sq - 8, false, 7));
-                            moves.Add(new Move('P', sq, sq - 8, false, 8));
-                            moves.Add(new Move('P', sq, sq - 8, false, 10));
-                            moves.Add(new Move('P', sq, sq - 8, false, 11));
+                            moves.Add(new Move('p', sq, sq - 8, false, 7));
+                            moves.Add(new Move('p', sq, sq - 8, false, 8));
+                            moves.Add(new Move('p', sq, sq - 8, false, 10));
+                            moves.Add(new Move('p', sq, sq - 8, false, 11));
                     }
                     else { moves.Add(new Move('p', sq, sq - 8, false)); }
                 }
@@ -791,19 +791,19 @@ namespace Bitboard
 
                 if (i == 6)
                 {
-                    if((square[sq - 16] & occupancy) == 0)moves.Add(new Move('P', sq, sq - 16, false));
+                    if((square[sq - 16] & occupancy) == 0)moves.Add(new Move('p', sq, sq - 16, false));
                 }
 
                 if ((j < 7) && (square[sq - 7] & oppOccupancy) != 0)
                 {
                     if (promotable)
                     {
-                        moves.Add(new Move('P', sq, sq - 7, true, 7));
-                        moves.Add(new Move('P', sq, sq - 7, true, 8));
-                        moves.Add(new Move('P', sq, sq - 7, true, 10));
-                        moves.Add(new Move('P', sq, sq - 7, true, 11));
+                        moves.Add(new Move('p', sq, sq - 7, true, 7));
+                        moves.Add(new Move('p', sq, sq - 7, true, 8));
+                        moves.Add(new Move('p', sq, sq - 7, true, 10));
+                        moves.Add(new Move('p', sq, sq - 7, true, 11));
                     }
-                    else { moves.Add(new Move('P', sq, sq - 7, true)); }
+                    else { moves.Add(new Move('p', sq, sq - 7, true)); }
                 }
 
 
@@ -811,12 +811,12 @@ namespace Bitboard
                 {
                     if (promotable)
                     {
-                        moves.Add(new Move('P', sq, sq - 9, true, 7));
-                        moves.Add(new Move('P', sq, sq - 9, true, 8));
-                        moves.Add(new Move('P', sq, sq - 9, true, 10));
-                        moves.Add(new Move('P', sq, sq - 9, true, 11));
+                        moves.Add(new Move('p', sq, sq - 9, true, 7));
+                        moves.Add(new Move('p', sq, sq - 9, true, 8));
+                        moves.Add(new Move('p', sq, sq - 9, true, 10));
+                        moves.Add(new Move('p', sq, sq - 9, true, 11));
                     }
-                    else { moves.Add(new Move('P', sq, sq - 9, true)); }
+                    else { moves.Add(new Move('p', sq, sq - 9, true)); }
                 }
             }
         }
