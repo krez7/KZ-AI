@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Bitboard
 {
-    public class Chessboard
+    public abstract class Chessboard
     {
         public const UInt64 diag = 72624976668147840; //0x8142241818244281
         public const UInt64 antiDiag = 9241421688590303745;
@@ -435,6 +435,10 @@ namespace Bitboard
             if (!side) { key ^= sideKey; }
             return key;
         }
+
+    public abstract List<Move> getMoves(bool color);
+
+    public abstract void makeMove(Move move, bool color);
 
     }
 }

@@ -991,7 +991,7 @@ namespace Bitboard
             }
         }
 
-        public List<Move> getMoves(bool color)
+        public override List<Move> getMoves(bool color)
         {
 
 
@@ -1083,7 +1083,7 @@ namespace Bitboard
             isInCheck = false;
             return list2;
         }
-        public void makeMove(Move move, bool color)
+        public override void makeMove(Move move, bool color)
         {
             
             bool enpassed = false;
