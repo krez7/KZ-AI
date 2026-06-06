@@ -490,6 +490,10 @@ namespace Bitboard
             return permutations;
         }
 
+        public static UInt64 generateMagic()
+        {
+            return (RandXOR.getRandUInt64() & RandXOR.getRandUInt64() & RandXOR.getRandUInt64());
+        }
 
         UInt64 findMagic(int iterations, int square, UInt64[] occupancies, UInt64 attackMask, bool slidingPiece) // 1 for bishop, 2 for rook
         {

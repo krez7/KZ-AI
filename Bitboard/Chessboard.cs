@@ -386,11 +386,6 @@ namespace Bitboard
             return bitCount(LS1B(n) - 1);
         }
 
-        public static UInt64 generateMagic()
-        {
-            return (RandXOR.getRandUInt64() & RandXOR.getRandUInt64() & RandXOR.getRandUInt64());
-        }
-
         public void initRandKey()
         {
             for(int i = 0; i < 12; i++)
